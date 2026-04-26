@@ -32,12 +32,16 @@ Construído para ser rápido e reativo, focado na experiência do usuário em mo
 - **Arquitetura:** Componentizada (botões, modais, _toasts_ de notificação reutilizáveis) com gestão de estado via _Hooks_ customizados (como o `useTheme` para o modo noturno).
 - **Estilização:** CSS puro (vanilla) utilizando Variáveis Nativas (`:root`) para controle de cores dinâmicas e design system próprio.
 
+**Confira aqui:** https://so-sconnect.vercel.app
+
 ### Back-end
 
 Responsável por toda a regra de negócio, processamento de dados e segurança das informações.
 
 - **Tecnologia:** Node.js com o framework Express.
 - **Arquitetura:** Arquitetura RESTful dividida em rotas e _Controllers_ específicos para cada domínio do sistema (Alertas, Pedidos, Ofertas, Pontos de Apoio e Estatísticas).
+
+**Confira aqui:** https://sosconnect.onrender.com
 
 ### Banco de Dados
 
