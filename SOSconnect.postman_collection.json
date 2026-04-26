@@ -1,0 +1,226 @@
+{
+  "info": {
+    "name": "SOSconnect API",
+    "description": "API do sistema SOSconnect — coordenação em situações de enchente.\n\nBase URL: http://localhost:3001",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base", "value": "http://localhost:3001" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{base}}/health",
+        "description": "Verifica se a API e o banco estão conectados."
+      }
+    },
+    {
+      "name": "Stats",
+      "request": {
+        "method": "GET",
+        "url": "{{base}}/api/stats",
+        "description": "Retorna totais de alertas, pedidos, pontos e ofertas."
+      }
+    },
+    {
+      "name": "Alertas",
+      "item": [
+        {
+          "name": "Listar alertas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/alerts",
+              "host": ["{{base}}"],
+              "path": ["api","alerts"],
+              "query": [
+                { "key": "status",   "value": "ativo",    "disabled": true, "description": "ativo | monitorando | resolvido" },
+                { "key": "severity", "value": "critico",  "disabled": true, "description": "baixo | medio | alto | critico" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar por ID",
+          "request": {
+            "method": "GET",
+            "url": "{{base}}/api/alerts/:id"
+          }
+        },
+        {
+          "name": "Criar alerta",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base}}/api/alerts",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Alagamento na Av. Central\",\n  \"description\": \"Água acima de 1 metro. Trânsito interrompido.\",\n  \"severity\": \"alto\",\n  \"location\": \"Av. Central, 500, Centro\",\n  \"reporter\": \"Defesa Civil\"\n}"
+            },
+            "description": "severity: baixo | medio | alto | critico"
+          }
+        },
+        {
+          "name": "Atualizar status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base}}/api/alerts/:id/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"resolvido\"\n}"
+            },
+            "description": "status: ativo | monitorando | resolvido"
+          }
+        },
+        {
+          "name": "Excluir alerta",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base}}/api/alerts/:id"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pedidos de Ajuda",
+      "item": [
+        {
+          "name": "Listar pedidos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/requests",
+              "host": ["{{base}}"],
+              "path": ["api","requests"],
+              "query": [
+                { "key": "status",  "value": "pendente", "disabled": true, "description": "pendente | em_atendimento | atendido | cancelado" },
+                { "key": "urgency", "value": "critica",  "disabled": true, "description": "baixa | media | alta | critica" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Criar pedido",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base}}/api/requests",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Maria Silva\",\n  \"contact\": \"(11) 98888-0001\",\n  \"location\": \"Rua das Flores, 45, fundos\",\n  \"need_type\": \"resgate\",\n  \"urgency\": \"critica\",\n  \"people\": 3,\n  \"description\": \"Família ilhada, água na cintura, temos uma criança.\"\n}"
+            },
+            "description": "need_type: resgate | abrigo | alimento | medicamento | agua | outro\nurgency: baixa | media | alta | critica"
+          }
+        },
+        {
+          "name": "Atualizar status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base}}/api/requests/:id/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"em_atendimento\"\n}"
+            },
+            "description": "status: pendente | em_atendimento | atendido | cancelado"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pontos de Apoio",
+      "item": [
+        {
+          "name": "Listar pontos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/points",
+              "host": ["{{base}}"],
+              "path": ["api","points"],
+              "query": [
+                { "key": "type",   "value": "abrigo", "disabled": true, "description": "abrigo | distribuicao | saude | resgate | outro" },
+                { "key": "status", "value": "ativo",  "disabled": true, "description": "ativo | lotado | inativo" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Criar ponto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base}}/api/points",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ginásio Municipal\",\n  \"type\": \"abrigo\",\n  \"location\": \"Rua das Flores, 100, Centro\",\n  \"contact\": \"(11) 3000-0001\",\n  \"capacity\": 200,\n  \"resources\": \"água, alimentação, médico\"\n}"
+            },
+            "description": "type: abrigo | distribuicao | saude | resgate | outro\nresources: string separada por vírgulas"
+          }
+        },
+        {
+          "name": "Atualizar ocupação",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base}}/api/points/:id",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"occupancy\": 85,\n  \"status\": \"ativo\"\n}"
+            },
+            "description": "status: ativo | lotado | inativo"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ofertas de Ajuda",
+      "item": [
+        {
+          "name": "Listar ofertas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base}}/api/offers",
+              "host": ["{{base}}"],
+              "path": ["api","offers"],
+              "query": [
+                { "key": "status",     "value": "disponivel",  "disabled": true, "description": "disponivel | em_uso | indisponivel" },
+                { "key": "offer_type", "value": "transporte",  "disabled": true, "description": "transporte | abrigo | alimento | medicamento | voluntariado | doacao | outro" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Criar oferta",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base}}/api/offers",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Costa\",\n  \"contact\": \"(11) 97777-0001\",\n  \"location\": \"Bairro Alto\",\n  \"offer_type\": \"transporte\",\n  \"description\": \"Tenho camionete 4x4, posso transportar até 6 pessoas.\",\n  \"availability\": \"Disponível o dia todo\"\n}"
+            },
+            "description": "offer_type: transporte | abrigo | alimento | medicamento | voluntariado | doacao | outro"
+          }
+        },
+        {
+          "name": "Atualizar status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base}}/api/offers/:id/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"em_uso\"\n}"
+            },
+            "description": "status: disponivel | em_uso | indisponivel"
+          }
+        }
+      ]
+    }
+  ]
+}
