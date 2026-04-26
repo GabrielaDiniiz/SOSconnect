@@ -30,6 +30,13 @@ app.get("/health", async (_req, res) => {
 
 app.use("/api", routes);
 
+app.get("/", (req, res) => {
+  res.json({
+    status: "online",
+    message: "Bem-vindo à API do SOSconnect! O sistema está funcionando.",
+  });
+});
+
 app.use((_req, res) =>
   res.status(404).json({ ok: false, message: "Rota não encontrada" }),
 );
@@ -39,12 +46,6 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ ok: false, message: "Erro interno" });
 });
 
-app.get("/", (req, res) => {
-  res.json({
-    status: "online",
-    message: "Bem-vindo à API do SOSconnect! O sistema está funcionando.",
-  });
-});
 // ── Start ──────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`\n🌊 SOSconnect API → http://localhost:${PORT}\n`);
