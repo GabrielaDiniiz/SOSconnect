@@ -2,6 +2,13 @@ require("dotenv").config();
 const pool = require("./db");
 
 const schema = `
+  
+  DROP TABLE IF EXISTS alerts CASCADE;
+  DROP TABLE IF EXISTS help_requests CASCADE;
+  DROP TABLE IF EXISTS support_points CASCADE;
+  DROP TABLE IF EXISTS help_offers CASCADE;
+
+  -- 2. Criação das extensões e tabelas
   CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
   CREATE TABLE IF NOT EXISTS alerts (
@@ -65,6 +72,7 @@ const schema = `
     updated_at   TIMESTAMPTZ DEFAULT NOW()
   );
 
+  -- 3. Triggers para atualizar a data
   CREATE OR REPLACE FUNCTION touch_updated_at()
   RETURNS TRIGGER LANGUAGE plpgsql AS $$
   BEGIN NEW.updated_at = NOW(); RETURN NEW; END;
@@ -81,6 +89,7 @@ const schema = `
     THEN CREATE TRIGGER trg_offers_updated BEFORE UPDATE ON help_offers FOR EACH ROW EXECUTE FUNCTION touch_updated_at(); END IF;
   END $$;
 
+  -- 4. Índices para performance
   CREATE INDEX IF NOT EXISTS idx_alerts_status   ON alerts(status);
   CREATE INDEX IF NOT EXISTS idx_requests_status ON help_requests(status);
   CREATE INDEX IF NOT EXISTS idx_requests_urgency ON help_requests(urgency);
@@ -106,9 +115,9 @@ const seeds = `
 async function migrate() {
   const client = await pool.connect();
   try {
-    console.log("🔄 Criando tabelas...");
+    console.log("🔄 Limpando e recriando tabelas...");
     await client.query(schema);
-    console.log("🌱 Inserindo dados iniciais...");
+    console.log("🌱 Inserindo dados iniciais limpos...");
     await client.query(seeds);
     console.log("✅ Banco configurado com sucesso!");
   } catch (err) {
