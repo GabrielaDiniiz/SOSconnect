@@ -1,6 +1,9 @@
+// A URL do Render
+const API_BASE_URL = "https://sosconnect.onrender.com";
+
 // ── API ──────────────────────────────────────────────────────
 export async function api(path, opts = {}) {
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(`${API_BASE_URL}/api${path}`, {
     headers: { "Content-Type": "application/json" },
     ...opts,
   });
